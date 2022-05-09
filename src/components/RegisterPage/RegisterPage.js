@@ -1,8 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import firebase from '../../firebase';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+import md5 from 'md5';
 
 function RegisterPage() {
   const {
@@ -21,16 +25,26 @@ function RegisterPage() {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
+
       const auth = getAuth();
       let createdUser = await createUserWithEmailAndPassword(
         auth,
         data.email,
         data.password,
       );
+      console.log('createdUser', createdUser);
+
+      await updateProfile(auth.currentUser, {
+        displayName: data.name,
+        photoURL: `http://gravatar.com/avatar/${md5(
+          createdUser.user.email,
+        )}?d=identicon`,
+      });
+
       setLoading(false);
     } catch (error) {
       setTimeout(() => {
-        setErrorFromSubmit('');
+        setErrorFromSubmit(error.message);
       }, 5000);
       setLoading(false);
     }
