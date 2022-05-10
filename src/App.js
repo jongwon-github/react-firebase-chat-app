@@ -33,7 +33,6 @@ function App() {
 
   if (isLoading) {
     return <div>...loading</div>;
-  } else {
   }
 
   return (
