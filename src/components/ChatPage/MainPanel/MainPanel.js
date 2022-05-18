@@ -5,7 +5,7 @@ import MessageForm from './MessageForm';
 export class MainPanel extends Component {
   render() {
     return (
-      <div style={{ padding: '2rem 2rem 0 2rem' }}>
+      <div style={{ padding: '2rem 2rem 0 4rem' }}>
         <MessageHeader />
         <div
           style={{
