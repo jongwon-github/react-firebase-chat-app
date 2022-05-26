@@ -7,7 +7,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from './redux/action/user_action';
+import { setUser, clearUser } from './redux/action/user_action';
 
 function App() {
   let navigate = useNavigate();
@@ -18,6 +18,7 @@ function App() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       console.log('user', user);
+      dispatch(setUser(user));
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
@@ -27,9 +28,10 @@ function App() {
         // User is signed out
         // ...
         navigate('/login');
+        dispatch(clearUser());
       }
     });
-  }, [navigate, dispatch]);
+  }, []);
 
   if (isLoading) {
     return <div>...loading</div>;
