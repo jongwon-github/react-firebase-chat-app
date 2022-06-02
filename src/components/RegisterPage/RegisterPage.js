@@ -44,9 +44,9 @@ function RegisterPage() {
 
       // Firebase 데이터베이스 저장해주기
       const db = getDatabase();
-      await set(ref(db, 'users/' + createdUser.user.uid), {
-        username: createdUser.user.displayName,
-        image: createdUser.user.photoURL,
+      await set(ref(db, 'users/' + auth.currentUser.uid), {
+        username: auth.currentUser.displayName,
+        image: auth.currentUser.photoURL,
       });
 
       setLoading(false);
