@@ -7,7 +7,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser, clearUser } from './redux/action/user_action';
+import { setUser, clearUser } from './redux/actions/user_action';
 
 function App() {
   let navigate = useNavigate();

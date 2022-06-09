@@ -2,18 +2,21 @@ import React, { useRef } from 'react';
 import { IoIosChatboxes } from 'react-icons/io';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Image from 'react-bootstrap/Image';
-import { useSelector } from 'react-redux';
-import { getAuth, signOut } from 'firebase/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuth, signOut, updateProfile } from 'firebase/auth';
 import mime from 'mime-types';
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { setPhotoURL } from '../../../redux/actions/user_action';
+import { getDatabase, ref as dRef, child, update } from 'firebase/database';
 
 function UserPanel() {
   const user = useSelector((state) => state.user.currentUser);
-
+  const dispatch = useDispatch();
   const inputOpenImageRef = useRef();
+  const auth = getAuth();
+  const db = getDatabase();
 
   const handleLogout = () => {
-    const auth = getAuth();
     signOut(auth)
       .then(() => {
         // Sign-out successful.
@@ -38,9 +41,24 @@ function UserPanel() {
       // Upload the file and metadata
       const uploadTask = uploadBytes(storageRef, file, metadata);
       console.log('uploadTask', uploadTask);
-    } catch (error) {}
 
-    console.log('file', file);
+      // Get the download URL
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log('downloadURL : ', downloadURL);
+
+      // 스토리지에 변경된 프로필 사진으로
+      await updateProfile(auth.currentUser, {
+        photoURL: downloadURL,
+      });
+
+      //
+      dispatch(setPhotoURL(downloadURL));
+
+      //
+      await update(child(dRef(db), `users/${user.uid}`), {
+        image: downloadURL,
+      });
+    } catch (error) {}
   };
 
   return (
