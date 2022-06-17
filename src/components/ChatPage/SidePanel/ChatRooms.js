@@ -28,13 +28,11 @@ export class ChatRooms extends Component {
           CHAT ROOMS (1)
           <FaPlus
             style={{ position: 'absolute', right: 0, cursor: 'pointer' }}
+            onClick={this.handleShow}
           />
         </div>
 
         {/* ADD CHAT ROOM MODAL */}
-        <Button variant="primary" onClick={this.handleShow}>
-          Launch demo modal
-        </Button>
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Create a chat room</Modal.Title>
