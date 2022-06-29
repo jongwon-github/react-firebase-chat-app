@@ -4,7 +4,6 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import ChatPage from './components/ChatPage/ChatPage';
 import LoginPage from './components/LoginPage/LoginPage';
 import RegisterPage from './components/RegisterPage/RegisterPage';
-import './firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, clearUser } from './redux/actions/user_action';

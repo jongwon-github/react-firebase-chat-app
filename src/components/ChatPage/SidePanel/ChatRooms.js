@@ -4,14 +4,44 @@ import { FaPlus } from 'react-icons/fa';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-
+import { connect } from 'react-redux';
+import { getDatabase, ref, push, child } from 'firebase/database';
 export class ChatRooms extends Component {
   state = {
     show: false,
+    name: '',
+    description: '',
+    chatRoomsRef: ref(getDatabase(), 'chatRooms'),
   };
 
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { name, description } = this.state;
+    if (this.isFormValid(name, description)) {
+    }
+  };
+
+  addChatRoom = () => {
+    const key = push(this.state.chatRoomsRef).key;
+    const { name, description } = this.state;
+    const { user } = this.props;
+    const newChatRoom = {
+      id: key,
+      name: name,
+      description: description,
+      createdBy: {},
+    };
+
+    try {
+    } catch (error) {}
+  };
+
+  isFormValid = (name, description) => {
+    return name && description;
+  };
 
   render() {
     return (
@@ -74,4 +104,10 @@ export class ChatRooms extends Component {
   }
 }
 
-export default ChatRooms;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.currentUser,
+  };
+};
+
+export default connect(mapStateToProps)(ChatRooms);
