@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
-import { getDatabase, ref, push, child } from 'firebase/database';
+import { getDatabase, ref, push, child, update } from 'firebase/database';
 export class ChatRooms extends Component {
   state = {
     show: false,
@@ -21,10 +21,11 @@ export class ChatRooms extends Component {
     e.preventDefault();
     const { name, description } = this.state;
     if (this.isFormValid(name, description)) {
+      this.addChatRoom();
     }
   };
 
-  addChatRoom = () => {
+  addChatRoom = async () => {
     const key = push(this.state.chatRoomsRef).key;
     const { name, description } = this.state;
     const { user } = this.props;
@@ -32,11 +33,22 @@ export class ChatRooms extends Component {
       id: key,
       name: name,
       description: description,
-      createdBy: {},
+      createdBy: {
+        name: user.displayName,
+        image: user.photoURL,
+      },
     };
 
     try {
-    } catch (error) {}
+      await update(child(this.state.chatRoomsRef, key), newChatRoom);
+      this.setState({
+        name: '',
+        description: '',
+        show: false,
+      });
+    } catch (error) {
+      alert(error);
+    }
   };
 
   isFormValid = (name, description) => {
