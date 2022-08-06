@@ -5,7 +5,15 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { connect } from 'react-redux';
-import { getDatabase, ref, push, child, update } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  push,
+  child,
+  update,
+  onChildAdded,
+} from 'firebase/database';
+import { setCurrentChatRoom } from '../../../redux/actions/chatRoom_action';
 export class ChatRooms extends Component {
   state = {
     show: false,
@@ -21,7 +29,7 @@ export class ChatRooms extends Component {
 
   AddChatRoomsListeners = () => {
     let chatRoomsArray = [];
-    this.state.chatRoomsRef.on('child_added', (DataSnapshot) => {
+    onChildAdded(this.state.chatRoomsRef, (DataSnapshot) => {
       chatRoomsArray.push(DataSnapshot.val());
       this.setState({ chatRooms: chatRoomsArray });
     });
@@ -68,9 +76,19 @@ export class ChatRooms extends Component {
     return name && description;
   };
 
+  changeChatRoom = (room) => {
+    this.props.dispatch(setCurrentChatRoom(room));
+  };
+
   renderChatRooms = (chatRooms) => {
-    chatRooms.length > 0 &&
-      chatRooms.map((room) => <li key={room.id}># {room.name}</li>);
+    return (
+      chatRooms.length > 0 &&
+      chatRooms.map((room) => (
+        <li key={room.id} onClick={() => this.changeChatRoom()}>
+          # {room.name}
+        </li>
+      ))
+    );
   };
 
   render() {
