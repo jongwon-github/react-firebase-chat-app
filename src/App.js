@@ -17,17 +17,16 @@ function App() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       console.log('user', user);
-      dispatch(setUser(user));
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
-        navigate('/');
         dispatch(setUser(user));
+        navigate('/');
       } else {
         // User is signed out
         // ...
-        navigate('/login');
         dispatch(clearUser());
+        navigate('/login');
       }
     });
   }, []);

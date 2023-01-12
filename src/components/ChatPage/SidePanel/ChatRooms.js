@@ -14,6 +14,7 @@ import {
   onChildAdded,
 } from 'firebase/database';
 import { setCurrentChatRoom } from '../../../redux/actions/chatRoom_action';
+
 export class ChatRooms extends Component {
   state = {
     show: false,
@@ -27,6 +28,10 @@ export class ChatRooms extends Component {
 
   componentDidMount() {
     this.AddChatRoomsListeners();
+  }
+
+  componentWillUnmount() {
+    this.state.chatRooms.off();
   }
 
   setFirstChatRoom = () => {

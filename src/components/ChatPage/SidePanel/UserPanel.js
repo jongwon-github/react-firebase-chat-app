@@ -31,7 +31,7 @@ function UserPanel() {
   };
 
   const storage = getStorage();
-  const storageRef = ref(storage, `user_image/${user.uid}`);
+  const storageRef = user ? ref(storage, `user_image/${user.uid}`) : null;
   const handleUploadImage = async (event) => {
     const file = event.target.files[0];
     try {
