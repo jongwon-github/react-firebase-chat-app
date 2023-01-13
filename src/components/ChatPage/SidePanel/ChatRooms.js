@@ -31,7 +31,9 @@ export class ChatRooms extends Component {
   }
 
   componentWillUnmount() {
-    this.state.chatRooms.off();
+    // 리스너 off 하는 방법을 모르겠음...
+    // 강의 내용대로 따라했지만 오류 발생...
+    //this.state.chatRoomsRef.off();
   }
 
   setFirstChatRoom = () => {
